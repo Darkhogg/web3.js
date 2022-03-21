@@ -340,9 +340,15 @@ Method.prototype._confirmTransaction = function (defer, result, payload) {
                         canUnsubscribe = false;
 
                         if (confirmationCount === method.transactionConfirmationBlocks + 1) { // add 1 so we account for conf 0
-                            sub.unsubscribe();
-                            defer.eventEmitter.removeAllListeners();
+                            canUnsubscribe = true
                         }
+                    } else {
+                        canUnsubscribe = true
+                    }
+                
+                    if (canUnsubscribe) {
+                        sub.unsubscribe();
+                        defer.eventEmitter.removeAllListeners();
                     }
 
                     return receipt;
